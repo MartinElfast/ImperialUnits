@@ -2,6 +2,9 @@
 
 namespace ImperialUnits
 {
+    /// <summary>
+    /// Se summary på Unit class
+    /// </summary>
     public interface IUnit
     {
         public BaseUnit BaseUnit { get; set; }

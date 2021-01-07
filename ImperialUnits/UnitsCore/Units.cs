@@ -56,10 +56,10 @@ namespace ImperialUnits
             };
         }
         /// <summary>
-        /// 
+        /// Försöker matcha in-parameter mot alla registrerade enheter i systemet.
         /// </summary>
         /// <param name="synonym"></param>
-        /// <returns>Unit som matchar input "synonym", eller null om enheten inte finns</returns>
+        /// <returns>Unit objektet om den hittar en match, eller null om den inte fanns</returns>
         public Unit GetUnitBySynonymOrDefault( string synonym ) => Catalogue.FirstOrDefault( x => x.Synonyms.Contains( synonym.ToLower().Trim() ) );
     }
 }

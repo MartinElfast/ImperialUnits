@@ -84,8 +84,8 @@ namespace ImperialUnits
                 Console.WriteLine( "Input must begin with numeric value, type 'help' for instructions." );
                 return false;
             }
-
-            fromUnit = units.GetUnitBySynonymOrDefault( splitInput[1] );
+            //försöker matcha input mot alla registrerade enheters namn, returnerar enheten om den hittar en, annars null
+            fromUnit = units.GetUnitBySynonymOrDefault( splitInput[1] ); 
             toUnit = units.GetUnitBySynonymOrDefault( splitInput[3] );
 
             if( fromUnit is null || toUnit is null ) //om någon av enheter är null så är de inte supportade/finns inte i vårt register.
@@ -94,7 +94,7 @@ namespace ImperialUnits
                 return false;
             }
 
-            //kolla att båda in av samma kategori
+            //kolla att båda in av samma kategori (kollar det i Unit.ConvertFrom redan
             if( fromUnit.BaseUnit.UnitCategory.Equals( toUnit.BaseUnit.UnitCategory ) ) //hade räckt med att bara jämföra BaseUnit men hela syftet med UnitCategory är att skilja på enheter
             {
                 return true;

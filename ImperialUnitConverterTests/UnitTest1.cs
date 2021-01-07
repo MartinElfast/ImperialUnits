@@ -11,15 +11,21 @@ namespace ImperialUnitConverterTests
         Unit yard;
         Unit inch;
         Unit fur;
+        Unit emptyUnit;
         [OneTimeSetUp]
         public void Setup()
         {
-            
+            emptyUnit = new Unit(new BaseUnit("",1d,""),1d,"");
             p = new ImperialConverterTerminal();
             units = p.units;
             yard = p.units.GetUnitBySynonymOrDefault( "yd" );
             inch = p.units.GetUnitBySynonymOrDefault( "Inch" );
             fur = p.units.GetUnitBySynonymOrDefault( "fur" );
+        }
+        [Test]
+        public void EmptyUnitWillExplode()
+        {
+            Assert.IsEmpty( emptyUnit.ToString() );
         }
         [Test]
         public void GetUnitFromSynYd()

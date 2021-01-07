@@ -9,7 +9,9 @@ namespace ImperialUnits
     public class Unit : IUnit
     {
         /// <summary>
-        /// 
+        /// Definitionen av en enhet, känner till sin basenhet (SI enhet) och sin omvandlingsfaktor till denna.
+        /// Kan konvertera sig själv till andra enheter inom samma system av mått och samma dimension.
+        /// Har en lista av namn och förkortningar på sig själv
         /// </summary>
         /// <param name="baseUnit">Standard enhet som alla beräkningar utgår ifrån</param>
         /// <param name="factor">Conversionsfaktor till standard enhet</param>
@@ -73,23 +75,27 @@ namespace ImperialUnits
             {
                 throw new ArgumentNullException( "Has to provide a valid unit" );
             }
+            if( !from.BaseUnit.UnitCategory.Equals( this.BaseUnit.UnitCategory ) )// kolla att båda enheterna tillhör samma system och kategori
+            {
+                throw new NotSupportedException( "Can't convert between these unit categories and/or systems" );
+            }
             if( this.ToBaseUnitFactor == 0d ) //kan inte ske i dagsläget, la till den pga att vi använder division i beräkningen, men någon kan initiera Unit fel osv säkerställer framtiden.
             {
                 throw new DivideByZeroException();
             }
-            //already baseunit
-            if (this.BaseUnit.Synonyms.FirstOrDefault().Equals(from.Synonyms.FirstOrDefault()))
-            {
-                return (value / this.ToBaseUnitFactor);
-            } //paranteser för att förtydliga.. hoppas de inte har motsatt effekt :)
             return ((from.ConvertToBaseUnit( value )) / this.ToBaseUnitFactor);
-            
+
         }
         public override string ToString()
         {
+            //early exit om det råkar finns ett felaktigt instansierad unit object.
+            if( !Synonyms.Any() || string.IsNullOrEmpty(Synonyms.FirstOrDefault()) )
+            {
+                return "Undefined synonyms, check init config";
+            }
             //Snygga till output lite iaf :)
-            string result = $"{this.Synonyms.First().Substring(0,1).ToUpper()+this.Synonyms.First().Substring(1)}";
-            foreach( var item in Synonyms.Skip( 1 ) )
+            string result = $"{this.Synonyms.FirstOrDefault().Substring(0,1).ToUpper()+this.Synonyms.FirstOrDefault().Substring(1)}";//gör första bokstaven stor i första ordet i Synonyms Listan
+            foreach( var item in Synonyms.Skip( 1 ) ) //hoppas över första ordet det är redan skrivet på raden ovan
             {
                 result += $",\t{item}";
             }
